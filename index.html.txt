@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SMA Negeri 1 Harapan</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Header & Navigasi -->
+  <header>
+    <div class="container header-container">
+      <h1>SMA Negeri 1 Harapan</h1>
+      <nav>
+        <a href="#home">Beranda</a>
+        <a href="#pengumuman">Pengumuman</a>
+        <a href="#pendaftaran">PPDB Online</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section id="home" class="hero">
+    <div class="container">
+      <h2>Selamat Datang di Website Resmi Sekolah</h2>
+      <p>Mewujudkan Generasi Cerdas, Berkarakter, dan Berprestasi.</p>
+    </div>
+  </section>
+
+  <!-- Pengumuman Section (Data dari GSheet) -->
+  <section id="pengumuman" class="container">
+    <h2>Pengumuman Terbaru</h2>
+    <div id="loading-pengumuman">Memuat pengumuman...</div>
+    <div id="pengumuman-list" class="grid-container"></div>
+  </section>
+
+  <!-- Formulir Pendaftaran (Kirim ke GSheet) -->
+  <section id="pendaftaran" class="container card">
+    <h2>Formulir Pendaftaran Siswa Baru (PPDB)</h2>
+    <form id="formPendaftaran">
+      <div class="form-group">
+        <label>Nama Lengkap</label>
+        <input type="text" id="nama" required>
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="email" required>
+      </div>
+      <div class="form-group">
+        <label>No. HP / WhatsApp</label>
+        <input type="tel" id="nohp" required>
+      </div>
+      <div class="form-group">
+        <label>Pilihan Jurusan</label>
+        <select id="jurusan" required>
+          <option value="">-- Pilih Jurusan --</option>
+          <option value="IPA">MIPA (Matematika & IPA)</option>
+          <option value="IPS">IPS (Ilmu Pengetahuan Sosial)</option>
+        </select>
+      </div>
+      <button type="submit" id="btnSubmit">Kirim Pendaftaran</button>
+      <div id="pesanForm"></div>
+    </form>
+  </section>
+
+  <footer>
+    <p>&copy; 2026 SMA Negeri 1 Harapan. All rights reserved.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

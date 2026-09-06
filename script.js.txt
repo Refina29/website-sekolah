@@ -1,0 +1,85 @@
+const API_URL = "https://script.google.com/macros/s/AKfycbzjVNphx4koH_p88BUz3q-_pMsVu2Bl7RaFM4MhExNx-ybbl8NJd_kWQ0pSHFPgQfdTdQ/exec";
+
+// 1. Ambil Data Pengumuman dari Google Sheets
+async function loadPengumuman() {
+  const loading = document.getElementById('loading-pengumuman');
+  const container = document.getElementById('pengumuman-list');
+  
+  try {
+    const response = await fetch(`${API_URL}?sheet=Pengumuman`);
+    const data = await response.json();
+    
+    loading.style.display = 'none';
+    container.innerHTML = '';
+    
+    if (data.length === 0) {
+      container.innerHTML = '<p>Belum ada pengumuman.</p>';
+      return;
+    }
+    
+    data.reverse().forEach(item => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      
+      // Format Tanggal
+      const tgl = item.Tanggal ? new Date(item.Tanggal).toLocaleDateString('id-ID') : '-';
+      
+      card.innerHTML = `
+        <h3 class="card-title">${item.Judul || 'Tanpa Judul'}</h3>
+        <div class="card-date">📅 ${tgl}</div>
+        <p>${item.Isi || ''}</p>
+      `;
+      container.appendChild(card);
+    });
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    loading.innerText = 'Gagal memuat pengumuman.';
+  }
+}
+
+// 2. Kirim Form Pendaftaran ke Google Sheets
+document.getElementById('formPendaftaran').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  
+  const btn = document.getElementById('btnSubmit');
+  const pesan = document.getElementById('pesanForm');
+  
+  btn.disabled = true;
+  btn.innerText = 'Sending...';
+  pesan.innerText = '';
+  
+  const payload = {
+    nama: document.getElementById('nama').value,
+    email: document.getElementById('email').value,
+    nohp: document.getElementById('nohp').value,
+    jurusan: document.getElementById('jurusan').value
+  };
+  
+  try {
+    const response = await fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload)
+    });
+    
+    const result = await response.json();
+    
+    if (result.status === 'success') {
+      pesan.style.color = 'green';
+      pesan.innerText = 'Pendaftaran Berhasil Terkirim!';
+      document.getElementById('formPendaftaran').reset();
+    } else {
+      throw new Error(result.message);
+    }
+  } catch (err) {
+    console.error(err);
+    pesan.style.color = 'red';
+    pesan.innerText = 'Gagal mengirim pendaftaran. Coba lagi.';
+  } finally {
+    btn.disabled = false;
+    btn.innerText = 'Kirim Pendaftaran';
+  }
+});
+
+// Jalankan fungsi saat halaman dimuat
+document.addEventListener('DOMContentLoaded', loadPengumuman);
